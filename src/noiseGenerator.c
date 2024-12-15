@@ -1,6 +1,6 @@
 #include "noiseGenerator.h"
 
-void GenerateWhiteNoise(int sample_rate, float duration, double** wave_out) {
+int GenerateWhiteNoise(int sample_rate, float duration, double** wave_out) {
     int sample_count = (int) floor(duration * sample_rate);
     double* samples = malloc(sample_count*sizeof(double));
     for (int i = 0; i < sample_count; i++) {
@@ -10,7 +10,7 @@ void GenerateWhiteNoise(int sample_rate, float duration, double** wave_out) {
     return sample_count;
 }
 
-void GeneratePinkNoise(int sample_rate, float duration, double** wave_out) {
+int GeneratePinkNoise(int sample_rate, float duration, double** wave_out) {
     int sample_count = (int) floor(duration * sample_rate);
     double* samples = malloc(sample_count*sizeof(double));
 
@@ -33,4 +33,5 @@ void GeneratePinkNoise(int sample_rate, float duration, double** wave_out) {
     }
 
     *wave_out = samples;
+    return sample_count;
 }
