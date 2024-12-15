@@ -11,9 +11,10 @@ int GenerateSineWave(double frequency,int sample_rate,float duration,double** wa
         samples[i] = sin(t * angular_freq);
         
     }
+
     *wave_out = samples;
-    return sample_count;
-     
+    
+    return sample_count; 
 }
 
 int GenerateCosWave(double frequency,int sample_rate,float duration,double** wave_out){
