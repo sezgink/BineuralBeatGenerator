@@ -76,13 +76,13 @@ void write_wav_header(FILE *file, int numSamples) {
 int main(int argc, char *argv[]) {
     if(argc<2){
         printf("Arguments not defined, use 'help' argument to see patterns");
-        printf("Arguments \"function[generate,help] duration(in minutes) frequency1 frequency2 noiseType[0 None,1 White,2 Pink] \"");
+        printf("Arguments \"function[generate,help] duration(in minutes) frequency1 frequency2 noiseType[0 None,1 White,2 Pink] output(filename) \"");
         return -1;
     }
-
     if(argc<5){
         printf("Use 2 frequency to get bineural beat.");
-    }
+        return -1;
+    } 
 
     double freq_l = atof (argv[3]);
     double freq_r = atof (argv[4]);
@@ -95,9 +95,29 @@ int main(int argc, char *argv[]) {
     int track_length_r = GenerateSineWave(freq_r,SAMPLE_RATE,duration,&track_r);
     track_length += track_length_l;
 
-    FILE *file = fopen("output2.wav", "wb");
+    double* noise_track = NULL;
+
+    if(argc>5 && (atoi (argv[5])==2)){
+        printf("Adding pink noise");
+        GeneratePinkNoise(SAMPLE_RATE,duration,&noise_track);
+        scale_values(noise_track,0.015,0,track_length-1);
+        scale_values(track_l,0.4,0,track_length-1);
+        scale_values(track_r,0.4,0,track_length-1);
+        add_to_track(track_l,noise_track,0,0,track_length);
+        add_to_track(track_r,noise_track,0,0,track_length);
+        free(noise_track);
+    }
+    
+    char* output_file = "output2.wav";
+    if(argc>6){
+        output_file = argv[6];
+    }
+
+
+    FILE *file = fopen(output_file, "wb");
+    // FILE *file = fopen("output2.wav", "wb");
     if (!file) {
-        fprintf(stderr, "Failed to create output.wav file\n");
+        fprintf(stderr, "Failed to create output file\n");
         return 1;
     }
 
@@ -110,6 +130,8 @@ int main(int argc, char *argv[]) {
     SaveAudio(file,track_l,track_r,track_length);
 
     fclose(file);
-    printf("WAV file created successfully: output.wav\n");
+    free(track_l);
+    free(track_r);
+    printf("WAV file created successfully: %s\n",output_file);
     return 0;
 }
