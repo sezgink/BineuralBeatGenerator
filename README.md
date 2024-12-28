@@ -122,7 +122,7 @@ This project is licensed under the GNU General Public License (GPL). See the [LI
 ---
 
 ## Contact
-For questions, feedback, or issues, please contact [Your Email] or open an issue in the repository.
+For questions, feedback, or issues, please contact sezginkutlu00@gmail.com or open an issue in the repository.
 
 ---
 
